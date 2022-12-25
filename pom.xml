@@ -12,6 +12,7 @@
     <module>tm-mtmy-gateway</module>
     <module>tm-mtmy-common</module>
     <module>tm-mtmy-home-server</module>
+      <module>tm-mtmy-user-server</module>
   </modules>
 
   <!-- 这是spring-cloud版本 -->

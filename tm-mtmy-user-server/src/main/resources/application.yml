@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
 spring:
   redis:
     host: 192.168.238.128
@@ -10,7 +10,7 @@ spring:
     password: 123
     driver-class-name: com.mysql.jdbc.Driver
   application:
-    name: tm-home
+    name: tm-user
   cloud:
     nacos:
       server-addr: localhost:8848 # nacos地址
