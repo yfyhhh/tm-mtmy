@@ -65,4 +65,28 @@ public class HomePageController {
         return Result.SUCCESS(homePageService.BeautifulSchool(userId,dateTime));
     }
 
+    /**
+     * 查询所有地区
+     * @return
+     */
+    @PostMapping("queryAllArea")
+    public Result queryAllArea(){
+        return Result.SUCCESS(homePageService.queryAllArea());
+    }
+
+    /**
+     * 查询所有的商家
+     * @return
+     */
+    @PostMapping("queryAllBusiness")
+    public Result queryAllBusiness(){
+        return Result.SUCCESS(homePageService.queryAllBusiness());
+    }
+
+
+    @PostMapping("nearShops")
+    public Result nearShops(){
+        return Result.SUCCESS();
+    }
+
 }

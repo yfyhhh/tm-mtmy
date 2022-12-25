@@ -1,12 +1,18 @@
 package com.tm.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.tm.entity.TmMtmyProvince;
 import com.tm.entity.Video;
 import com.tm.entity.vo.*;
 import com.tm.mapper.HomePageMapper;
 import com.tm.service.HomePageService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,5 +78,27 @@ public class HomePageServiceImpl implements HomePageService {
             a.setTextType(textType.get(a.getTextTypeId().toString()));
         });
         return beautifulSchoolVos;
+    }
+
+    /**
+     * 查询resource目录下的json数据
+     * @return
+     */
+    @Override
+    public List<TmMtmyProvince> queryAllArea() {
+        List<TmMtmyProvince> maps = null;
+        try {
+            File file = ResourceUtils.getFile("classpath:city.json");
+            String s = FileUtils.readFileToString(file, "UTF-8");
+            maps = JSON.parseArray(s, TmMtmyProvince.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return maps;
+    }
+
+    @Override
+    public List<Object> queryAllBusiness() {
+        return null;
     }
 }
