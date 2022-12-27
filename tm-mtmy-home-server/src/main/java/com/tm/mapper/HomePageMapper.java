@@ -1,5 +1,6 @@
 package com.tm.mapper;
 
+import com.tm.entity.Business;
 import com.tm.entity.Video;
 import com.tm.entity.vo.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -176,4 +177,22 @@ public interface HomePageMapper {
                 "uf.user_id != #{param1} " +
             "order by t.create_time desc ")
     List<BeautifulSchoolVo> BeautifulSchoolUnByUserId(Long userId, Long dateTime, long l);
+
+    @Select("select " +
+                "business_id as businessId, " +
+                "business_name as businessName, " +
+                "business_user_id as businessUserId " +
+            "from " +
+                "t_business ")
+    List<Business> queryAllBusiness();
+
+    @Select("SELECT " +
+                "s.*, " +
+                "(SELECT avg(se.star_level) from t_shop_evaluate as se where se.shop_id = s.shop_id) as starLevel, " +
+                "(SELECT count(1) from t_shop_evaluate as se where se.shop_id = s.shop_id) as evaluateCount " +
+            "FROM " +
+                "t_shop as s " +
+            "where " +
+                "city_id = 440100")
+    List<NearShopsVo> queryShopsByCityId(Long cityId);
 }

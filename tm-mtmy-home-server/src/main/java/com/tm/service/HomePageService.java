@@ -1,7 +1,9 @@
 package com.tm.service;
 
+import com.tm.entity.Business;
 import com.tm.entity.TmMtmyProvince;
 import com.tm.entity.Video;
+import com.tm.entity.dto.NearShopsDTO;
 import com.tm.entity.vo.*;
 
 import java.util.List;
@@ -20,5 +22,7 @@ public interface HomePageService {
 
     List<TmMtmyProvince> queryAllArea();
 
-    List<Object> queryAllBusiness();
+    List<Business> queryAllBusiness();
+
+    List<NearShopsVo> nearShops(NearShopsDTO nearShopsDTO);
 }

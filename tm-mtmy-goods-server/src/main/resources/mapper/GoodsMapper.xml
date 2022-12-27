@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tm.mapper.GoodsMapper">
+
+    <resultMap id="goodsVoMap" type="com.tm.entity.vo.GoodsVo">
+        <id column="goods_id" property="goodsId"></id>
+        <result column="goods_banner" property="goodsBanner"></result>
+        <result column="goods_name" property="goodsName"></result>
+        <result column="goods_by" property="goodsBy"></result>
+        <result column="goods_business_id" property="goodsBusinessId"></result>
+        <result column="goods_introduce" property="goodsIntroduce"></result>
+        <result column="type_name" property="typeName"></result>
+        <collection property="specs" ofType="com.tm.entity.vo.SpecsGoodsVo">
+            <id column="sgm_id" property="sgmId"></id>
+            <result column="specs_id" property="specsId"></result>
+            <result column="goods_sgm_price" property="goodsSgmPrice"></result>
+            <result column="sales_volume_num" property="salesVolumeNum"></result>
+            <result column="goods_stock" property="goodsStock"></result>
+        </collection>
+    </resultMap>
+
+    <resultMap id="goodsBoMap" type="com.tm.entity.bo.GoodsBO">
+        <id column="goods_id" property="goodsId"></id>
+        <result column="goods_banner" property="goodsBanner"></result>
+        <result column="goods_name" property="goodsName"></result>
+        <result column="goods_by" property="goodsBy"></result>
+        <result column="goods_introduce" property="goodsIntroduce"></result>
+        <result column="type_name" property="typeName"></result>
+        <association property="goodsBO" javaType="com.tm.entity.bo.SpecsGoodsBO">
+            <id column="sgm_id" property="sgmId"></id>
+            <result column="specs_id" property="specsId"></result>
+            <result column="goods_sgm_price" property="goodsSgmPrice"></result>
+            <result column="sales_volume_num" property="salesVolumeNum"></result>
+            <result column="goods_stock" property="goodsStock"></result>
+        </association>
+    </resultMap>
+
+    <!--查询商品详情-->
+    <select id="goodsItem" resultMap="goodsVoMap">
+        select
+            *
+            from
+                t_goods as g
+            left join
+                t_goods_type_mapping as gtm on g.goods_id = gtm.goods_id
+            left join
+                t_goods_type as gt on gtm.type_id = gt.type_id
+            left join
+                t_specs_goods_mapping as sgm on sgm.goods_id = g.goods_id
+            left join
+                t_specs as s on sgm.specs_id = s.specs_id
+            where
+                g.goods_id = #{goodsId}
+            and
+                g.goods_is_up = 0
+            and
+                sgm.goods_is_up = 0
+    </select>
+
+    <!--查询商品详情-->
+    <select id="goodsInfoBySpecId" resultMap="goodsBoMap">
+        select
+            *
+        from
+            t_goods as g
+                left join
+            t_goods_type_mapping as gtm on g.goods_id = gtm.goods_id
+                left join
+            t_goods_type as gt on gtm.type_id = gt.type_id
+                left join
+            t_specs_goods_mapping as sgm on sgm.goods_id = g.goods_id
+                left join
+            t_specs as s on sgm.specs_id = s.specs_id
+        where
+            g.goods_id = #{param1}
+          and
+            g.goods_is_up = 0
+          and
+            sgm.goods_is_up = 0
+          and
+            s.specs_id = #{param2}
+    </select>
+
+</mapper>

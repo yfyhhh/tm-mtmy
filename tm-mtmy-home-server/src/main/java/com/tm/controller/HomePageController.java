@@ -1,5 +1,6 @@
 package com.tm.controller;
 
+import com.tm.entity.dto.NearShopsDTO;
 import com.tm.entity.vo.SelectedActivitiesVo;
 import com.tm.result.Result;
 import com.tm.service.HomePageService;
@@ -83,10 +84,14 @@ public class HomePageController {
         return Result.SUCCESS(homePageService.queryAllBusiness());
     }
 
-
+    /**
+     * 查询附近店铺
+     * @param nearShopsDTO
+     * @return
+     */
     @PostMapping("nearShops")
-    public Result nearShops(){
-        return Result.SUCCESS();
+    public Result nearShops(NearShopsDTO nearShopsDTO){
+        return Result.SUCCESS(homePageService.nearShops(nearShopsDTO));
     }
 
 }

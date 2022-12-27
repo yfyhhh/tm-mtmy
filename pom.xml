@@ -13,6 +13,7 @@
     <module>tm-mtmy-common</module>
     <module>tm-mtmy-home-server</module>
       <module>tm-mtmy-user-server</module>
+      <module>tm-mtmy-goods-server</module>
   </modules>
 
   <!-- 这是spring-cloud版本 -->

@@ -1,0 +1,40 @@
+server:
+  port: 8083
+spring:
+  redis:
+    host: 192.168.238.128
+    port: 6379
+  datasource:
+    url: jdbc:mysql://localhost:3306/mrmy?useSSL=false
+    username: root
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+  application:
+    name: tm-goods
+  cloud:
+    nacos:
+      server-addr: localhost:8848 # nacos地址
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 30MB
+
+mybatis-plus:
+  type-aliases-package: com.tm.entity
+  mapper-locations: classpath*:/mapper/*.xml
+  global-config:
+    db-config:
+      #主键自增
+      id-type: auto
+      table-underline: true
+      table-prefix: t_
+      schema: yfy
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 控制台日志打印
+logging:
+  level:
+    com.tm: debug
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
