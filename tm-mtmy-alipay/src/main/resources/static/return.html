@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>支付成功</title>
+</head>
+<body>
+<div>
+    您已成功购买此商品，感谢您的支持
+</div>
+</body>
+<script>
+
+    location.href = "http://rcuyee.natappfree.cc/paySuccess/paySuccess?orderId=";
+
+    function GetRequest(urlStr){
+        if (typeof urlStr == "undefined"){
+            // 获取url中?后的字符串
+            var url = decodeURI(location.search);
+        }else {
+            var url = "?" + urlStr.split("?")[1];
+        }
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1){
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++){
+                theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+</script>
+</html>

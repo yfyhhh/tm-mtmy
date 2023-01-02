@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>确认订单</title>
+</head>
+<body>
+<div>
+    您的订单信息如下，请确认无误后支付：<br />
+    xxxxxxxxxx省略订单信息xxxxxxxxxx
+    <!-- 通过表单将订单信息传到后台 -->
+    <button type="button" onclick="aaa()">确认支付</button>
+
+</div>
+</body>
+<script>
+
+    // 获取地址栏中的订单编号
+    var href = location.href;
+    var object = GetRequest(href);
+
+    function aaa(){
+        location.href = "/pay/confirm?orderId=" + object.ordersId + "&subject=" + object.goodsName + "&total=" + object.price;
+    }
+
+    function GetRequest(urlStr){
+        if (typeof urlStr == "undefined"){
+            // 获取url中?后的字符串
+            var url = decodeURI(location.search);
+        }else {
+            var url = "?" + urlStr.split("?")[1];
+        }
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1){
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++){
+                theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+</script>
+</html>

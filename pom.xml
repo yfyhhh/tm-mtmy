@@ -14,6 +14,7 @@
     <module>tm-mtmy-home-server</module>
       <module>tm-mtmy-user-server</module>
       <module>tm-mtmy-goods-server</module>
+      <module>tm-mtmy-alipay</module>
   </modules>
 
   <!-- 这是spring-cloud版本 -->

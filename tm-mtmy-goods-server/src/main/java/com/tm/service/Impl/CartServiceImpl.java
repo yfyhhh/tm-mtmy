@@ -63,7 +63,7 @@ public class CartServiceImpl implements CartService {
             // 没有超出的话,更新数量
             jsonObject.put("count",redisCount + addCount);
             // 大key是用户ID， 小key是商品ID，value就是要加到购物车中的商品信息
-            redisTemplate.opsForHash().put("cart_" + addCartDTO.getUserId(),addCartDTO.getGoodsId(),jsonObject);
+            redisTemplate.opsForHash().put("cart_" + addCartDTO.getUserId(),addCartDTO.getSpecId(),jsonObject);
         }else {
             // 购物车不存在当前商品
             // 将数据存入redis
@@ -73,7 +73,7 @@ public class CartServiceImpl implements CartService {
             jsonObjectUser.put("goodsName",goodsBO.getGoodsName());
             jsonObjectUser.put("goodsBanner",goodsBO.getGoodsBanner());
             // 大key是用户ID， 小key是商品ID，value就是要加到购物车中的商品信息
-            redisTemplate.opsForHash().put("cart_" + addCartDTO.getUserId(),addCartDTO.getGoodsId(),jsonObjectUser);
+            redisTemplate.opsForHash().put("cart_" + addCartDTO.getUserId(),addCartDTO.getSpecId(),jsonObjectUser);
         }
         return Result.SUCCESS(ResultCodeEnum.SUCCESS);
     }
