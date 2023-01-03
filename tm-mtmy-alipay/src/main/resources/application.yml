@@ -4,6 +4,24 @@ server:
 spring:
   application:
     name: tm-alipay
+  datasource:
+    url: jdbc:mysql://localhost:3306/mrmy?useSSL=false
+    username: root
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis-plus:
+  type-aliases-package: com.tm.entity
+  mapper-locations: classpath*:/mapper/*.xml
+  global-config:
+    db-config:
+      #主键自增
+      id-type: auto
+      table-underline: true
+      table-prefix: t_
+      schema: yfy
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 alipay:
   appId: 2021000121660691
@@ -12,6 +30,6 @@ alipay:
   #支付网关配置，这一项是写死的，正式环境是openapi.alipay.com
   gateway: openapi.alipaydev.com
   #支付成功之后的回调页面，只是一个友好页面。主要换成你自己映射的临时域名
-  returnUrl: http://rcuyee.natappfree.cc/return.html
+  returnUrl: http://kmrf93.natappfree.cc/paySuccess/paySuccess
   #支付成功的接口回调，我们还没写，先空着
-  notifyUrl: http://rcuyee.natappfree.cc/paySuccess/paySuccess
+  notifyUrl: http://kmrf93.natappfree.cc/paySuccess/paySuccess

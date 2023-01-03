@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class OrderSubBO {
 
     private Long id;
-    private Long ordersId;
+    private String ordersId;
     private Long goodsId;
     // 成交价格
     private BigDecimal buyDealPrice;
@@ -25,11 +25,11 @@ public class OrderSubBO {
         this.id = id;
     }
 
-    public Long getOrdersId() {
+    public String getOrdersId() {
         return ordersId;
     }
 
-    public void setOrdersId(Long ordersId) {
+    public void setOrdersId(String ordersId) {
         this.ordersId = ordersId;
     }
 

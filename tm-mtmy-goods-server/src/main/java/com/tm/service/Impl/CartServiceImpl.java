@@ -49,7 +49,7 @@ public class CartServiceImpl implements CartService {
         Map entries = redisTemplate.opsForHash().entries("cart_" + addCartDTO.getUserId());
 
         // 判断是否已有当前商品
-        JSONObject jsonObject = (JSONObject)entries.get(addCartDTO.getGoodsId());
+        JSONObject jsonObject = (JSONObject)entries.get(addCartDTO.getSpecId());
         if (jsonObject != null){
             // 购物车已存在当前商品
             // 判断再加会不会超出库存
@@ -70,9 +70,10 @@ public class CartServiceImpl implements CartService {
             JSONObject jsonObjectUser = new JSONObject();
             jsonObjectUser.put("specsId",goodsBO.getGoodsBO().getSpecsId());
             jsonObjectUser.put("count",addCartDTO.getCount());
+            jsonObjectUser.put("goodsId",goodsBO.getGoodsId());
             jsonObjectUser.put("goodsName",goodsBO.getGoodsName());
             jsonObjectUser.put("goodsBanner",goodsBO.getGoodsBanner());
-            // 大key是用户ID， 小key是商品ID，value就是要加到购物车中的商品信息
+            // 大key是用户ID， 小key是商品规格ID，value就是要加到购物车中的商品信息
             redisTemplate.opsForHash().put("cart_" + addCartDTO.getUserId(),addCartDTO.getSpecId(),jsonObjectUser);
         }
         return Result.SUCCESS(ResultCodeEnum.SUCCESS);

@@ -95,10 +95,10 @@ public interface OrderMapper {
                 "#{param1}, " +
                 "unix_timestamp(now()), " +
                 "0)")
-    void addOrder(Long userId, long orderId);
+    void addOrder(Long userId, String orderId);
 
     @Update("update t_orders set orders_total_price = #{param2} where orders_id = #{param1}")
-    void insertOrderPrice(long orderId, BigDecimal bigDecimal);
+    void insertOrderPrice(String orderId, BigDecimal bigDecimal);
 
     @Update("update " +
                 "t_orders " +
@@ -106,13 +106,13 @@ public interface OrderMapper {
                 "orders_type = 2 " +
             "where " +
                 "orders_id = #{orderId}")
-    void updateOrder(Long orderId);
+    void updateOrder(String orderId);
 
     @Select("select " +
-                "* " +
+                "orders_type " +
             "from " +
                 "t_orders " +
             "where " +
                 "orders_id = #{orderId}")
-    Integer getOrderFlag(Long orderId);
+    Integer getOrderFlag(String orderId);
 }

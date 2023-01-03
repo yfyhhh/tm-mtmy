@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class PaymentBO {
     //省略其他的业务参数，如商品id、购买数量等
 
-    private Long ordersId;
+    private String ordersId;
     //商品名称
     private String subject;
  
@@ -33,11 +33,11 @@ public class PaymentBO {
         this.total = total;
     }
 
-    public Long getOrdersId() {
+    public String getOrdersId() {
         return ordersId;
     }
 
-    public void setOrdersId(Long ordersId) {
+    public void setOrdersId(String ordersId) {
         this.ordersId = ordersId;
     }
 }

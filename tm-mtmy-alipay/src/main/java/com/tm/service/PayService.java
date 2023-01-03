@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
  
 import java.math.BigDecimal;
- 
+import java.util.UUID;
+
 /**
  *  支付宝支付，业务实现
  *
@@ -37,10 +38,14 @@ public class PayService {
                 //选择网页支付平台
                 .Page()
                 //调用支付方法，设置订单名称、我们自己系统中的订单号、金额、回调页面
-                .pay(bo.getSubject() , OrderUtil.getOrderNo(), bo.getTotal().toString() , returnUrl);
+                .pay(bo.getSubject() , bo.getOrdersId(), bo.getTotal().toString() , returnUrl);
  
         //这里的response.body，就是一个可以直接加载的html片段，
         // 这里为了简单我直接返回这个片段，前端直接
         return response.body;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(UUID.randomUUID().toString().replace("-",""));
     }
 }

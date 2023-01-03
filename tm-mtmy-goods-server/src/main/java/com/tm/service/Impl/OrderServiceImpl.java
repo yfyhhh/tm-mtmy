@@ -117,8 +117,8 @@ public class OrderServiceImpl implements OrderService {
             BigDecimal bigDecimal = new BigDecimal(0);
             // 有唯一标识，说明是第一次请求
             // 创建订单号
-            IdWorker idWorker = new IdWorker(1, 1, 1);
-            long orderId = idWorker.nextId();
+            String s = UUID.randomUUID().toString().replaceAll("-", "");
+            String orderId = s + s;
             // 对前端传过来的商品进行价格计算
             List<CreateOrderListDTO> createOrderListDTOS = createOrderDTO.getCreateOrderListDTOS();
             // 先将订单存入数据库
@@ -140,7 +140,7 @@ public class OrderServiceImpl implements OrderService {
                 try {
                     orderMapper.addOrderSub(orderSubBO);
                     // 删除购物车数据
-                    redisTemplate.opsForHash().delete("cart_",createOrderDTO.getUserId(),orderSubBO.getSgmId());
+                    redisTemplate.opsForHash().delete("cart_" + createOrderDTO.getUserId(),orderSubBO.getSgmId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -157,6 +157,7 @@ public class OrderServiceImpl implements OrderService {
 
             // 删除redis中的唯一标识
             redisTemplate.delete(orderFlag);
+
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("orderId",orderId);
             jsonObject.put("price",bigDecimal);
@@ -169,7 +170,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Async
-    public void updateOrder(Long orderId){
+    public void updateOrder(String orderId){
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -182,6 +183,6 @@ public class OrderServiceImpl implements OrderService {
                 timer.cancel();
             }
         };
-        timer.schedule(timerTask,10000);
+        timer.schedule(timerTask,1800000);
     }
 }
