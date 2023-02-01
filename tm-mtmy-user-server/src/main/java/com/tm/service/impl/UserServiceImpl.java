@@ -1,6 +1,8 @@
 package com.tm.service.impl;
 
+import com.tm.entity.QRCodeUserLogin;
 import com.tm.entity.User;
+import com.tm.entity.UserByFlag;
 import com.tm.entity.dto.UserDTO;
 import com.tm.mapper.UserMapper;
 import com.tm.result.Result;
@@ -12,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -80,5 +83,66 @@ public class UserServiceImpl implements UserService {
         }else {
             return Result.FAIL("验证码错误");
         }
+    }
+
+    /**
+     * 添加登录标识
+     * @param userByFlag
+     * @return
+     */
+    @Override
+    public Result saveLoginFlag(UserByFlag userByFlag) {
+        redisTemplate.opsForValue().set(userByFlag.getFlag(),userByFlag.getBeauticianId(),1l, TimeUnit.MINUTES);
+        return Result.SUCCESS(ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 根据标识查询用户
+     * @param userByFlag
+     * @return
+     */
+    @Override
+    public Result queryUserByFlag(UserByFlag userByFlag) {
+        // 先查redis，如果传入的标识是abc，美容师id是123
+        String str = redisTemplate.opsForValue().get(userByFlag.getFlag()).toString();
+        if (str.equals(userByFlag.getBeauticianId().toString())){
+            // 如果还是123，则证明没人扫码登陆过，前端继续轮询
+            return Result.FAIL(222,"未检测到有用户登录");
+        }else {
+            // 如果不是123，则证明扫码人登陆成功并修改了redis中的数据
+            // 将redis中修改过之后的用户ID（登陆人ID）返回给前端
+            // 删除redis中的数据
+            redisTemplate.delete(userByFlag.getFlag());
+            return Result.SUCCESS(str);
+        }
+    }
+
+    /**
+     * 用户扫码登录
+     * @param qrCodeUserLogin
+     * @return
+     */
+    @Override
+    public Result userQRCodeLogin(QRCodeUserLogin qrCodeUserLogin) {
+        // 判断当前用户的账号密码是否正确
+        User user = userMapper.queryUserByName(qrCodeUserLogin.getUserName());
+        if (!qrCodeUserLogin.getPassWord().equals(user.getUserPwd())){
+            return Result.FAIL(899,"登录密码错误");
+        }
+        // 判断redis中的id和登陆人的id是否是同一个id
+        String str = redisTemplate.opsForValue().get(qrCodeUserLogin.getFlag()).toString();
+        if (str.equals(user.getUserId().toString())){
+            return Result.FAIL(900,"不能使用同一个账号登录");
+        }else {
+            // 修改redis中的标识
+            redisTemplate.opsForValue().set(qrCodeUserLogin.getFlag(),user.getUserId(),1,TimeUnit.MINUTES);
+            // 判断当前用户是否绑定了美容师
+            if (user.getBeauticianUserId() == null){
+                // 将当前用户绑定给当前美容师
+                userMapper.bindUser(user.getUserId(),qrCodeUserLogin.getBeauticianId());
+            }
+            return Result.SUCCESS(user.getUserId());
+        }
+
     }
 }

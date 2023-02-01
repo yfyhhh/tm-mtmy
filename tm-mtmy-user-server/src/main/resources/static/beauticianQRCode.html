@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="qrcode.min.js"></script>
+    <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+</head>
+<body>
+    <div id="qrcode"></div>
+</body>
+<script type="text/javascript">
+
+    var s = guid();
+
+    $(function(){
+        //要保证先将数据存储到Redis中，再进行查询
+        saveLoginFlag();
+    })
+
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        //统计每一个美容师的用户转化
+        //在当前页面，将美容师的ID也传到后台
+        //我们现在暂时写死，对于安卓和苹果的同事来说，他们会存储登录人的信息，包括ID
+        text: "http://y6degk.natappfree.cc/userLogin.html?flag="+s+"&beauticianId=110",
+        width: 128,
+        height: 128,
+        colorDark : "#f60",
+        colorLight : "#ccc",
+        correctLevel : 0 // 二维码结构复杂性 0~3
+    });
+
+    function guid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    //当前页面需要轮询查询当前标识有没有人登陆过了
+    //js定时任务
+    var interval = setInterval("queryCustomerLoginFlag()",1000);
+
+    function queryCustomerLoginFlag(){
+        $.ajax({
+            url:"http://localhost:8082/api/user/queryUserByFlag",
+            data:{
+                flag:s,
+                beauticianId:110
+            },
+            type:"post",
+            dataType:"json",
+            async:true,
+            success:function(result){
+                //需要判断是否查到了用户的登录信息
+                //如果没有查到当前标识对应的信息，则继续查
+                //如果已经查到了，则代表用户已经登录，并返回了用户的登录信息
+                if(result.code != 200){
+
+                }else{
+                    alert(result.data+"已经登录成功");
+                }
+            },
+            error:function(){
+
+            }
+        })
+    }
+
+    //保存二维码对应的登录标识
+    function saveLoginFlag() {
+        $.ajax({
+            url:"http://localhost:8082/api/user/saveLoginFlag",
+            data:{
+                flag:s,
+                beauticianId:110
+            },
+            type:"post",
+            dataType:"json",
+            async:true,
+            success:function(result){
+                //需要判断是否查到了用户的登录信息
+                //如果没有查到当前标识对应的信息，则继续查
+                //如果已经查到了，则代表用户已经登录，并返回了用户的登录信息
+                if(result.code == 200){
+                    //就保存登录之后的用户信息
+                    var userId = result.data;
+                    clearInterval(interval);
+                    alert(userId+"登陆成功，跳转到登陆成功后检测的页面");
+                }
+            },
+            error:function(){
+
+            }
+        })
+    }
+
+    setTimeout("invalidQRCode()",300000);
+
+    function invalidQRCode() {
+        var elementById = document.getElementById("qrcode");
+        elementById.style.width="128";
+        elementById.style.height="128";
+        elementById.style.colorDark="#f60";
+        elementById.style.colorLight="#ccc";
+        elementById.innerText = "二维码已失效，请重新刷新页面";
+        clearInterval(interval);
+    }
+</script>
+</html>

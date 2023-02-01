@@ -4,7 +4,7 @@ public enum ResultCodeEnum {
     /**
      * 枚举属性
      */
-    SUCCESS(300,"操作成功"),
+    SUCCESS(200,"操作成功"),
     FAIL(301,"操作失败"),
     TOKEN_FAIL(2003, "token解析异常"),
     TOKEN_UNDEFINED(2004, "token不存在"),

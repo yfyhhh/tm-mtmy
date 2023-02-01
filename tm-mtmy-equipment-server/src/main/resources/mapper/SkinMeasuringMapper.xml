@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tm.mapper.SkinMeasuringMapper">
+    
+    
+    <insert id="addSkinmiRecord" parameterType="com.tm.entity.SkinMeasuringRecord" useGeneratedKeys="true" keyProperty="skinId">
+        insert into
+            t_skinmi_record (
+                surface_skin_state,
+                bottom_skin_state,
+                ultraviolet_skin_state,
+                skin_color_grade,
+                beautician_id,
+                member_id,
+                member_phone,
+                record_time
+            ) values (
+                  #{surfaceImg},
+                  #{bottomImg},
+                  #{urImg},
+                  #{skinColor},
+                  #{beauticianId},
+                  #{memberId},
+                  #{memberPhone},
+                  unix_timestamp(now())
+            )
+    </insert>
+    
+    <insert id="addUserSkinDimensionRecord">
+        insert into
+            t_user_skin_dimension_record (
+                skin_id,
+                dimension_id,
+                dimension_skin_grade
+            ) values 
+                <foreach collection="mapList" item="a" separator=",">
+                    (
+                        #{skinId},
+                        #{a.dimensionId},
+                        #{a.grade}
+                    )
+                </foreach>
+    </insert>
+
+</mapper>

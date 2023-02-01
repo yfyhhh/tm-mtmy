@@ -15,6 +15,7 @@
       <module>tm-mtmy-user-server</module>
       <module>tm-mtmy-goods-server</module>
       <module>tm-mtmy-alipay</module>
+      <module>tm-mtmy-equipment-server</module>
   </modules>
 
   <!-- 这是spring-cloud版本 -->
@@ -84,7 +85,7 @@
         <artifactId>lombok</artifactId>
         <version>1.18.16</version>
       </dependency>
-      <!--nacos的管理依赖-->
+      <!--spring cloud alibaba-->
       <dependency>
         <groupId>com.alibaba.cloud</groupId>
         <artifactId>spring-cloud-alibaba-dependencies</artifactId>

@@ -1,6 +1,8 @@
 package com.tm.controller;
 
+import com.tm.entity.QRCodeUserLogin;
 import com.tm.entity.User;
+import com.tm.entity.UserByFlag;
 import com.tm.entity.dto.UserDTO;
 import com.tm.result.Result;
 import com.tm.result.ResultCodeEnum;
@@ -8,15 +10,13 @@ import com.tm.service.UserService;
 import com.tm.utils.SendSmsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("api/user")
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -58,6 +58,37 @@ public class UserController {
     public Result userLogin(@RequestBody UserDTO user){
         return Result.SUCCESS(userService.userLogin(user));
     }
+
+    /**
+     *根据标识查询用户
+     * @param userByFlag
+     * @return
+     */
+    @PostMapping("queryUserByFlag")
+    public Result queryUserByFlag(UserByFlag userByFlag){
+        return userService.queryUserByFlag(userByFlag);
+    }
+
+    /**
+     * 添加登录标识
+     * @param userByFlag
+     * @return
+     */
+    @PostMapping("saveLoginFlag")
+    public Result saveLoginFlag(UserByFlag userByFlag){
+        return userService.saveLoginFlag(userByFlag);
+    }
+
+    /**
+     *
+     * @param qrCodeUserLogin
+     * @return
+     */
+    @PostMapping("userQRCodeLogin")
+    public Result userQRCodeLogin(QRCodeUserLogin qrCodeUserLogin){
+        return userService.userQRCodeLogin(qrCodeUserLogin);
+    }
+
 }
 
 

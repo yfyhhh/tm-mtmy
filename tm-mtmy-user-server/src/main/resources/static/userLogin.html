@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+</head>
+<body>
+    <center>
+        <input id="userName" style="width: 300px;height: 50px"><br>
+        <input id="passWord" style="width: 300px;height: 50px"><br>
+        <button onclick="userLogin()" style="width: 300px;height: 50px">用户登录</button>
+    </center>
+</body>
+<script>
+    function userLogin(){
+        // 获取用户名，密码和二维码页面传来的唯一标识
+        // 传到后台进行操作
+        var url = location.href;
+        var object = GetRequest(url);
+
+        $.ajax({
+            url:"http://y6degk.natappfree.cc/api/user/userQRCodeLogin",
+            data:{
+                userName:$("#userName").val(),
+                passWord:$("#passWord").val(),
+                flag:object.flag,
+                beauticianId:object.beauticianId
+            },
+            type:"post",
+            dataType:"json",
+            async:false,
+            success:function(result){
+                //需要判断是否查到了用户的登录信息
+                //如果没有查到当前标识对应的信息，则继续查
+                //如果已经查到了，则代表用户已经登录，并返回了用户的登录信息
+                if(result.code != 200){
+                    alert("失败"+result.message);
+                }else{
+                    alert(result.data+"登录成功！！！");
+                }
+            },
+            error:function(){
+
+            }
+        })
+    }
+
+    function GetRequest(urlStr){
+        if (typeof urlStr == "undefined"){
+            // 获取url中?后的字符串
+            var url = decodeURI(location.search);
+        }else {
+            var url = "?" + urlStr.split("?")[1];
+        }
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1){
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++){
+                theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+</script>
+</html>
